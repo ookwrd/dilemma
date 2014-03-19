@@ -9,6 +9,8 @@ public class Constants {
 	static int internalSteps = 100; // number of time steps done by the GRN during one time step of the "server".
 	//Represents the discrepancy between reaction and diffusion.
 	
+	static double defaultDecay = 1.0; // decay spead of species (one a.u. per time step)
+	
 	static String propertiesFileName = "default.prop";
 	
 	public Properties readProperties(String fileName) {
@@ -37,6 +39,10 @@ public class Constants {
 		
 		if(properties.getProperty("internalSteps") != null){
 			internalSteps = Integer.parseInt(properties.getProperty("internalSteps"));
+		}
+		
+		if(properties.getProperty("defaultDecay") != null){
+			defaultDecay = Double.parseDouble(properties.getProperty("defaultDecay"));
 		}
 	}
 
