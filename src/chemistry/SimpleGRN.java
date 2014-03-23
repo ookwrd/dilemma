@@ -9,7 +9,10 @@ import org.apache.commons.math3.exception.MaxCountExceededException;
 import org.apache.commons.math3.ode.FirstOrderDifferentialEquations;
 import org.apache.commons.math3.ode.nonstiff.GraggBulirschStoerIntegrator;
 
-public class SimpleGRN implements FirstOrderDifferentialEquations{
+import world.Decision;
+import world.Perception;
+
+public class SimpleGRN implements FirstOrderDifferentialEquations, GRNIF{
 
 	LinkedHashMap<String,Double> speciesConcentrations; //Cannot be empty
 	HashMap<String,ArrayList<Connection>> connections; // all connections starting from the species
@@ -131,21 +134,43 @@ public class SimpleGRN implements FirstOrderDifferentialEquations{
 		return initialConditions;
 	}
 	
-public static double[][] solveEqus(LinkedHashMap<String, Double> initConcentrations, HashMap<String,ArrayList<Connection>> connections,HashMap<String, ArrayList<Connection>> inhibitions){
+	private double[][] solveEqus(){
 		
-		SimpleGRN odes = new SimpleGRN(initConcentrations, connections, inhibitions);
 		GraggBulirschStoerIntegrator myIntegrator = new GraggBulirschStoerIntegrator(
 				1e-13, 1, 1e-6, 1e-6);
-		misc.MyStepHandler handler = new misc.MyStepHandler(odes.getDimension());
+		misc.MyStepHandler handler = new misc.MyStepHandler(this.getDimension());
 		myIntegrator.addStepHandler(handler);
 		myIntegrator.addEventHandler(new misc.CalcErrEventHandler(), 2000, 0.000000001, 100000);
 		myIntegrator.addEventHandler(new misc.MyODEEventHandler(), 10, 1, 100);
-		double[] initialConditions = odes.generateInitialConditions();
-		myIntegrator.integrate(odes, 0, initialConditions, misc.Constants.internalSteps ,
+		double[] initialConditions = this.generateInitialConditions();
+		myIntegrator.integrate(this, 0, initialConditions, misc.Constants.internalSteps ,
 				initialConditions);
 		return handler.getTimeSerie();
 	}
+
+@Override
+public Decision getDecisionAtTime(double time, Perception p) {
 	
+	this.speciesConcentrations.put("signalIn", p.getSignalIn());
+	this.speciesConcentrations.put("health", p.getHealth());
+	this.speciesConcentrations.put("messageIn", p.getMessageIn());
+	if(misc.Constants.faces)
+		this.speciesConcentrations.put("faceIn", p.getFaceIn());
 	
+	double[][] res = this.solveEqus();
+	
+	String[] names = speciesConcentrations.keySet().toArray(null);
+	for(int i=0; i<names.length; i++){
+		speciesConcentrations.put(names[i],res[i][res[i].length-1]); //update results
+	}
+	
+	Decision dec = new Decision();
+	
+	dec.setCooperate(speciesConcentrations.get("cooperate")>misc.Constants.threshold);
+	dec.setSignalOut(speciesConcentrations.get("signalOut"));
+	dec.setSpeed(speciesConcentrations.get("speed"));
+	
+	return dec;
+}
 	
 }

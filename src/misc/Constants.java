@@ -13,6 +13,10 @@ public class Constants {
 	
 	public static String propertiesFileName = "default.prop";
 	
+	public static boolean faces = false; // do we take faces into account or not?
+	
+	public static double threshold = 10.0; // the threshold concentration value to cooperate
+	
 	public Properties readProperties(String fileName) {
         propertiesFileName = fileName;
 //        if (fileName.equals(""))
@@ -44,6 +48,10 @@ public class Constants {
 		if(properties.getProperty("defaultDecay") != null){
 			defaultDecay = Double.parseDouble(properties.getProperty("defaultDecay"));
 		}
+		if(properties.getProperty("faces") != null){
+			faces = Boolean.parseBoolean(properties.getProperty("faces"));
+		}
+		
 	}
 
 }
