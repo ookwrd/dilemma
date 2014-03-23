@@ -12,7 +12,7 @@ import org.apache.commons.math3.ode.nonstiff.GraggBulirschStoerIntegrator;
 import world.Decision;
 import world.Perception;
 
-public class SimpleGRN implements FirstOrderDifferentialEquations, GRNIF{
+public class SimpleGRN implements FirstOrderDifferentialEquations, GRN{
 
 	LinkedHashMap<String,Double> speciesConcentrations; //Cannot be empty
 	HashMap<String,ArrayList<Connection>> connections; // all connections starting from the species
