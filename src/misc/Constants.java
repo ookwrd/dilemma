@@ -4,14 +4,14 @@ import java.util.Properties;
 
 public class Constants {
 	
-	static int nbNodes = 10; // max number of nodes in one GRN
+	public static int nbNodes = 10; // max number of nodes in one GRN
 	
-	static int internalSteps = 100; // number of time steps done by the GRN during one time step of the "server".
+	public static int internalSteps = 100; // number of time steps done by the GRN during one time step of the "server".
 	//Represents the discrepancy between reaction and diffusion.
 	
-	static double defaultDecay = 1.0; // decay spead of species (one a.u. per time step)
+	public static double defaultDecay = 1.0; // decay spead of species (one a.u. per time step)
 	
-	static String propertiesFileName = "default.prop";
+	public static String propertiesFileName = "default.prop";
 	
 	public Properties readProperties(String fileName) {
         propertiesFileName = fileName;
