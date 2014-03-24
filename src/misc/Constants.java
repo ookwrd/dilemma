@@ -17,6 +17,8 @@ public class Constants {
 	
 	public static double threshold = 10.0; // the threshold concentration value to cooperate
 	
+//	public static int numberGenes = nbNodes + nbNodes*nbNodes + nbNodes*nbNodes*nbNodes;
+	
 	public Properties readProperties(String fileName) {
         propertiesFileName = fileName;
 //        if (fileName.equals(""))
