@@ -27,6 +27,7 @@ public class Genotype implements Cloneable {
 	
 	public Genotype(){
 		speciesCount = necessarySpecies.size();
+		speciesNames = new String[speciesCount];
 		speciesNames = necessarySpecies.toArray(speciesNames);
 		speciesConc = new double[speciesCount];
 		Arrays.fill(speciesConc, Constants.baseConc);
@@ -68,14 +69,13 @@ public class Genotype implements Cloneable {
 	}
 	
 	public static Genotype mutate(Genotype gen){
-		Genotype genprime = gen.clone();
 		//With some probability...
-		mutateParam(genprime);
-		addConnection(genprime);
-		addInhibition(genprime);
-		cleanUp(genprime);
+		mutateParam(gen);
+		addConnection(gen);
+		addInhibition(gen);
+		cleanUp(gen);
 		
-		return genprime;
+		return gen;
 	}
 	
 	private static double gaussianParam(double oldParam, double factor, double min, double max){
@@ -211,6 +211,9 @@ public class Genotype implements Cloneable {
 		int count = 0;
 		while(rand.nextDouble()<Constants.addInhibitionProba && count < Constants.maxAddedInhibitionAtOnce){
 			ArrayList<Connection> inhibitable = gen.getNotInhibitedConnections();
+			if(inhibitable.isEmpty()){
+				return;
+			}
 			double value = (Constants.minInhibConcentration+Constants.maxInhibConcentration)/2.0+(Constants.maxInhibConcentration-Constants.minInhibConcentration)/2.0*rand.nextGaussian();
 			Connection c = inhibitable.get(rand.nextInt(inhibitable.size()));
 			Connection cPrime = new Connection(c.getFrom(),c.getTo(),value); //gives data plus inhibition strength
@@ -222,7 +225,7 @@ public class Genotype implements Cloneable {
 	
 	//If a new connection justifies a new sequence, add one
 	private static String addSpecies(Genotype gen){
-		String s = "S"+(Integer.parseInt(gen.speciesNames[gen.speciesCount-1].substring(1))+1);
+		String s = gen.speciesCount>necessarySpecies.size()?"S"+(Integer.parseInt(gen.speciesNames[gen.speciesCount-1].substring(1))+1):"S1";
 		gen.speciesCount++;
 		String[] tempNames = new String[gen.speciesCount];
 		double[] tempConc = new double[gen.speciesCount];
@@ -342,5 +345,18 @@ public class Genotype implements Cloneable {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public String toString(){
+		String result = "Genotype Number of species:"+this.speciesCount;
+		return result;
+	}
+	
+	public static void main(String[] args){
+		Genotype gen = new Genotype();
+		for(int i=0;i<100;i++){
+			gen = Genotype.mutate(gen);
+			System.out.println(gen);
+		}
 	}
 }
