@@ -25,6 +25,21 @@ public class Genotype implements Cloneable {
 	public ArrayList<ArrayList<Connection>> connections; //connections, indexed by speciesNames index
 	public ArrayList<ArrayList<Connection>> inhibitions; //inhibitions, indexed by speciesNames index
 	
+	public Genotype(){
+		speciesCount = necessarySpecies.size();
+		speciesNames = necessarySpecies.toArray(speciesNames);
+		speciesConc = new double[speciesCount];
+		Arrays.fill(speciesConc, Constants.baseConc);
+		connections = new ArrayList<ArrayList<Connection>>();
+		inhibitions = new ArrayList<ArrayList<Connection>>();
+		for(int i=0; i<speciesCount; i++){
+			connections.add(new ArrayList<Connection>());
+			inhibitions.add(new ArrayList<Connection>());
+		}
+		
+		mutate(this); //Generate a random genotype
+	}
+	
 	public static SimpleGRN fromGenotype(Genotype gen){
 		LinkedHashMap<String,Double> speciesConcentrations = new LinkedHashMap<String,Double>();
 		//Necessary species
@@ -318,7 +333,10 @@ public class Genotype implements Cloneable {
 	
 	public Genotype clone(){
 		try {
-			return (Genotype) super.clone();
+			Genotype clone = (Genotype) super.clone();
+			
+			
+			return clone;
 		} catch (CloneNotSupportedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

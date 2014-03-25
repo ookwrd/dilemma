@@ -51,7 +51,5 @@ public class Connection implements Cloneable{
 			
 		return from == c.from && to == c.to;
 	}
-	
-	//public 
 
 }
