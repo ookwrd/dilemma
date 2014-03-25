@@ -1,6 +1,6 @@
 package chemistry;
 
-public class Connection {
+public class Connection implements Cloneable{
 	
 	private String from;
 	
@@ -18,12 +18,28 @@ public class Connection {
 		return from;
 	}
 	
+	public void setFrom(String from){
+		this.from = from;
+	}
+	
 	public String getTo(){
 		return to;
 	}
 	
+	public void setTo(String to){
+		this.to = to;
+	}
+	
 	public double getStrength(){
 		return strength;
+	}
+	
+	public void setStrength(double strength){
+		this.strength = strength;
+	}
+	
+	public String toString(){
+		return "C f: "+from+" t: "+to+" s: "+strength;
 	}
 	
 	public boolean equals(Object o){
@@ -35,5 +51,7 @@ public class Connection {
 			
 		return from == c.from && to == c.to;
 	}
+	
+	//public 
 
 }
