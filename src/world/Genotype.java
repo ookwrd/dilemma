@@ -140,14 +140,19 @@ public class Genotype implements Cloneable {
 			
 			if(rand.nextDouble() < Constants.newSpeciesProba){
 				//We add a new species in the process
-				if(rand.nextDouble() < Constants.connectionCutProba){
+				//First, flatten the list of existing connections
+				ArrayList<Connection> allConnections = new ArrayList<Connection>();
+				for(int i = 0; i< gen.connections.size(); i++){
+					allConnections.addAll(gen.connections.get(i)); //connections.get(i) might be empty
+				}
+				
+				
+				
+				if(!allConnections.isEmpty() && rand.nextDouble() < Constants.connectionCutProba){
 					//We take a connection and cut it in two
 					
-					//First, flatten the list of existing connections
-					ArrayList<Connection> allConnections = new ArrayList<Connection>();
-					for(int i = 0; i< gen.connections.size(); i++){
-						allConnections.addAll(gen.connections.get(i)); //connections.get(i) might be empty
-					}
+					
+					
 					//Then, pick one at random
 					Connection c = allConnections.get(rand.nextInt(allConnections.size()));
 					String newS = addSpecies(gen);
@@ -178,10 +183,12 @@ public class Genotype implements Cloneable {
 				}
 			} else{
 			ArrayList<Connection> possibleConnections = gen.getPossibleConnections();
-			Connection c = possibleConnections.get(rand.nextInt(possibleConnections.size()));
-			c.setStrength((Constants.minConnecConcentration+Constants.maxConnecConcentration)/2.0+(Constants.maxConnecConcentration-Constants.minConnecConcentration)/2.0*rand.nextGaussian());
+			if(!possibleConnections.isEmpty()){
+				Connection c = possibleConnections.get(rand.nextInt(possibleConnections.size()));
+				c.setStrength((Constants.minConnecConcentration+Constants.maxConnecConcentration)/2.0+(Constants.maxConnecConcentration-Constants.minConnecConcentration)/2.0*rand.nextGaussian());
 			
-			gen.connections.get(gen.indexSpecies(c.getFrom())).add(c);
+				gen.connections.get(gen.indexSpecies(c.getFrom())).add(c);
+			}
 			}
 			count++;
 		}
@@ -348,7 +355,11 @@ public class Genotype implements Cloneable {
 	}
 	
 	public String toString(){
-		String result = "Genotype Number of species:"+this.speciesCount;
+		ArrayList<Connection> allConnections = new ArrayList<Connection>();
+		for(int i = 0; i< connections.size(); i++){
+			allConnections.addAll(connections.get(i)); //connections.get(i) might be empty
+		}
+		String result = "Genotype Number of species:"+this.speciesCount+" Number of connections:"+allConnections.size();
 		return result;
 	}
 	

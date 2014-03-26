@@ -21,7 +21,7 @@ public class Constants {
 	
 	public static double minInitConcentration = 0.0; //min initial concentration for species	
 	public static double maxInitConcentration = 100.0; // max initial concentration for species
-	public static double baseConc = 0.0;//Concentration when creating a new species
+	public static double baseConc = 1.0;//Concentration when creating a new species
 	
 	public static double minConnecConcentration = 0.0; //min strength for connections
 	public static double maxConnecConcentration = 100.0; // max strength for connections
@@ -42,7 +42,7 @@ public class Constants {
 	
 	public static double addConnectionProba = 0.1;
 	public static int maxAddedConnectionAtOnce = 3;
-	public static double newSpeciesProba = 0.05; // probability to add a new species along with a connection
+	public static double newSpeciesProba = 0.25; // probability to add a new species along with a connection
 	public static double connectionCutProba = 0.7; // probability, when adding a new connection,
 	//                                                   to do so by cutting an existing connection in two.
 	
